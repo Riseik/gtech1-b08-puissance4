@@ -11,7 +11,7 @@ int play_again = 1;
 
 void basic_grid()
 {
-  printf("  1 2 3 4 5 6 7 \n");
+  printf("\e[0;36m  1 2 3 4 5 6 7 \n");
   printf("_________________\n");
   for (line = 0; line < 6; line++)
   {
@@ -30,7 +30,7 @@ void basic_grid()
     }
     printf("\n");
   }
-  printf("_________________\n");
+  printf("_________________\e[0m\n");
 }
 
 void game_grid()
@@ -47,7 +47,14 @@ void game_grid()
       }
       else if (grid[line][column] != '.')
       {
-        printf("%c", grid[line][column]);
+        if (grid[line][column] == 'X')
+        {
+          printf("\e[1;34m%c\e[0m", grid[line][column]);
+        }
+        else
+        {
+          printf("\e[1;31m%c\e[0m", grid[line][column]);
+        }
         printf(" ");
         continue;
       }
@@ -63,7 +70,7 @@ void game_grid()
   printf("_________________\n");
 }
 
-void test_victory(player1)
+void test_victory(player)
 {
   for (line = 0; line < 6; line++)
   {
@@ -107,13 +114,13 @@ void test_victory(player1)
   }
   if (victory == 1)
   {
-    if (player1 == 1)
+    if (player == 0)
     {
-      printf("Well done Player 1 (X), you've won! ");
+      printf("Well done Player 1 (\e[1;34mX\e[0m), you've won! ");
     }
     else
     {
-      printf("Well done Player 2 (O), you've won! ");
+      printf("Well done Player 2 (\e[1;31mO\e[0m), you've won! ");
     }
   }
 }
@@ -138,20 +145,20 @@ void test_draw()
   }
 }
 
-void placed_token(player1, token)
+void placed_token(player, token)
 {
   can_be_placed = 0;
   while (can_be_placed == 0)
   {
-    if (player1 == 1)
+    if (player == 0)
     {
-      printf("Player 1, in which column would you place your token(X)?\n");
+      printf("Player 1, in which column would you place your token(\e[1;34mX\e[0m)?\n");
     }
     else
     {
-      printf("Player 2, in which column would you place your token(O)?\n");
+      printf("Player 2, in which column would you place your token(\e[1;31mO\e[0m)?\n");
     }
-    fflush(stdin);
+    setbuf (stdin, NULL);
     scanf("%d", &place);
     for (line = 0; line < 6; line++)
     {
@@ -185,8 +192,8 @@ void another_game()
   int decision = 0;
   while (decision == 0)
   {
-    printf("Wanna play another game? (y/n)\n");
-    fflush(stdin);
+    printf("Wanna play another game? (\e[1;32my\e[0m/\e[1;31mn\e[0m)\n");
+    setbuf (stdin, NULL);
     scanf ("%c", &answer);
     if (answer == 'n')
     {
@@ -214,13 +221,12 @@ void main()
   {
     int draw = 0;
     victory = 0;
-    int player1 = 1;
-    int player2 = 0;
-    printf("Player 1 play with X and player 2 play with O.\n\n");
+    int player = 0;
+    printf("Player 1 play with \e[1;34mX\e[0m and player 2 play with \e[1;31mO\e[0m.\n\n");
     basic_grid();
     while (victory == 0)
     {
-      if (player1 == 1)
+      if (player == 0)
       {
         token = 'X';
       }
@@ -228,16 +234,21 @@ void main()
       {
         token = 'O';
       }
-      placed_token(player1, token);
+      placed_token(player, token);
       game_grid();
-      test_victory(player1);
+      test_victory(player);
       if (victory ==0)
       {
         test_draw();
       }
-      int tmp = player1;
-      player1 = player2;
-      player2 = tmp;
+      if (player == 0)
+      {
+        player = 1;
+      }
+      else
+      {
+        player = 0;
+      }
     }
     another_game();
   }
