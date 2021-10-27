@@ -162,7 +162,21 @@ void placed_token(player, token)
     scanf("%d", &place);
     for (line = 0; line < 6; line++)
     {
-      if (place < 1 || place > 7)
+      if (place == -1)
+      {
+        victory = 1;
+        can_be_placed = 1;
+        if (player == 1)
+        {
+          printf("Well done Player 1 (\e[1;34mX\e[0m), you've won! ");
+        }
+        else
+        {
+          printf("Well done Player 2 (\e[1;31mO\e[0m), you've won! ");
+        }
+        break;
+      }
+      else if (place < 1 || place > 7)
       {
         printf("Invalid column...");
         break;
@@ -222,7 +236,7 @@ void main()
     int draw = 0;
     victory = 0;
     int player = 0;
-    printf("Player 1 play with \e[1;34mX\e[0m and player 2 play with \e[1;31mO\e[0m.\n\n");
+    printf("Player 1 play with \e[1;34mX\e[0m and player 2 play with \e[1;31mO\e[0m.\n\nWrite (-1) to forfeit.\n");
     basic_grid();
     while (victory == 0)
     {
@@ -235,11 +249,14 @@ void main()
         token = 'O';
       }
       placed_token(player, token);
-      game_grid();
-      test_victory(player);
-      if (victory ==0)
+      if (victory == 0)
       {
-        test_draw();
+        game_grid();
+        test_victory(player);
+        if (victory == 0)
+        {
+          test_draw();
+        }
       }
       if (player == 0)
       {
