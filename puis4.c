@@ -11,7 +11,7 @@ int play_again = 1;
 
 void basic_grid()
 {
-  printf("\e[0;36m  1 2 3 4 5 6 7 \n");
+  printf("  1 2 3 4 5 6 7 \n");
   printf("_________________\n");
   for (line = 0; line < 6; line++)
   {
@@ -30,7 +30,7 @@ void basic_grid()
     }
     printf("\n");
   }
-  printf("_________________\e[0m\n");
+  printf("_________________\n");
 }
 
 void game_grid()
